@@ -16,43 +16,46 @@ import android.widget.EditText;
 public class MainActivity extends AppCompatActivity {
     int contador = 0;
     //String mensaje = String.valueOf(contador);
-
+    EditText editText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        View v = findViewById(R.id.btnenviar);//castin
-        Button boton = (Button) v;
+        try {
+            super.onCreate(savedInstanceState);
+            setContentView(R.layout.activity_main);
+            View v = findViewById(R.id.btnenviar);//castin
+            Button boton = (Button) v;
         /*Intent intent = new Intent(this, Main2Activity.class);//intent explicito xq digo dnd quiero ir
            startActivity(intent);*/
 
-        boton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intentenviar = new Intent();
-                intentenviar.setAction(Intent.ACTION_SEND);
-                View vista = findViewById(R.id.miedittext);
-                EditText editText = (EditText)findViewById(R.id.miedittext);
-                String mensaje = editText.getText().toString();
+            boton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intentenviar = new Intent();
+                    intentenviar.setAction(Intent.ACTION_SEND);
+                    View vista = findViewById(R.id.miedittext);
+                    editText = (EditText) findViewById(R.id.miedittext);
+                    String mensaje = editText.getText().toString();
 
-                intentenviar.putExtra(Intent.EXTRA_TEXT, mensaje/*"Hola que tal"*/);
-                intentenviar.setType("text/plain");
-                intentenviar.setPackage("com.whatsapp");//le digo q quiero x whatsapp
-                startActivity(intentenviar);
+                    intentenviar.putExtra(Intent.EXTRA_TEXT, mensaje/*"Hola que tal"*/);
+                    intentenviar.setType("text/plain");
+                    intentenviar.setPackage("com.whatsapp");//le digo q quiero x whatsapp
+                    startActivity(intentenviar);
 
-                SharedPreferences sp = getSharedPreferences("Historial", Context.MODE_PRIVATE);
-                SharedPreferences.Editor ed = sp.edit();
-                contador++;
-                String mensajes = sp.getString("mensaje"+contador, mensaje);
-                ed.putString("mensaje"+contador, mensaje);
-                ed.commit();
-            }
-        });
+                    SharedPreferences sp = getSharedPreferences("Historial", Context.MODE_PRIVATE);
+                    SharedPreferences.Editor ed = sp.edit();
+                    contador++;
+                    String mensajes = sp.getString("mensaje" + contador, mensaje);
+                    ed.putString("mensaje" + contador, mensaje);
+                    ed.commit();
+                }
+            });
 
 
+        }catch (Throwable e){
+            Log.e("mensaje", "Error en onCreate", e);
+        }
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -66,8 +69,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         Log.d("Mensaje", "ITEM ID"+item.getItemId());
-
-
        /* if (item.getItemId()==1){
             Log.d("Mensaje", "El usuario le ha dado a salir");
             this.finish();
@@ -84,9 +85,12 @@ public class MainActivity extends AppCompatActivity {
                //Intent i = new Intent(Intent.ACTION_VIEW);
                 //i.setData(Uri.parse("http://femxa-ebtm.rhcloud.com"));
                 //startActivity(i);
+
                 Intent intent = new Intent(this, Main2Activity.class);
                 startActivity(intent);
                 break;
+
+
         }
         return super.onOptionsItemSelected(item);
     }
